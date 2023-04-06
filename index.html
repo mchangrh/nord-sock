@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      body, a {
+        background: #111;
+        color: #ddd;
+        font-size: 16px;
+        font-family: monospace;
+      }
+      input, button, select {
+        font-family: inherit;
+        background: inherit;
+        color: inherit;
+        border: 1px solid #ccc;
+      }
+    </style>
+  </head>
+  <body>
+    <a href="https://support.nordvpn.com/Connectivity/Proxy/">What's My Service Username/ Password?</a>
+    <br>
+    Service Username <input id="service_username">
+    <br>
+    Service Password <input id="service_password">
+    <br>
+    Server <select id="server">
+      <option value="atlanta.us">Atlanta (🇺🇸)</option>
+      <option value="dallas.us">Dallas (🇺🇸)</option>
+      <option value="los-angeles.us">Los Angeles (🇺🇸)</option>
+      <option value="us">United States (🇺🇸)</option>
+      <option value="amsterdam.nl">Amsterdam (🇳🇱)</option>
+      <option value="nl">Netherlands (🇳🇱)</option>
+      <option value="stockholm.se">Stockholm (🇸🇪)</option>
+      <option value="se">Sweden (🇸🇪)</option>
+    </select>
+    <br>
+    <button onclick="generate()">Generate</button>
+    <br>
+    <input id="generated" style="width: 50%" value="socks5h://username:password@server.socks.nordhold.net:1080"><button onclick="copy()" id="copy">📋</button>
+    <script>
+      const usernameID = "service_username"
+      const passwordID = "service_password"
+      load() // load saved values
+      listen() // add listeners to inputs
+      function generate() {
+        const username = document.getElementById(usernameID).value
+        const password = document.getElementById(passwordID).value
+        if (username && password) save(username, password)
+        const server = document.getElementById("server").value
+        const response = `socks5h://${username}:${password}@${server}.socks.nordhold.net:1080`
+        document.getElementById("generated").value = response
+      }
+      function copy() {
+        const value = document.getElementById("generated").value
+        navigator.clipboard.writeText(value)
+        const button = document.getElementById("copy")
+        button.innerText = "✅"
+      }
+      function load() {
+        const username = localStorage.getItem(usernameID)
+        const password = localStorage.getItem(passwordID)
+        if (username) document.getElementById(usernameID).value = username
+        if (password) document.getElementById(passwordID).value = password
+        if (username && password) generate()
+      }
+      function save(username, password) {
+        localStorage.setItem(usernameID, username)
+        localStorage.setItem(passwordID, password)
+      }
+      function listen() {
+        const username = document.getElementById(usernameID)
+        const password = document.getElementById(passwordID)
+        const server = document.getElementById("server")
+        username.addEventListener("change", () => generate())
+        password.addEventListener("change", () => generate())
+        server.addEventListener("change", () => generate())
+      }
+    </script>
+  </body>
+</html>
