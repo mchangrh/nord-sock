@@ -49,6 +49,7 @@
         const server = document.getElementById("server").value
         const response = `socks5h://${username}:${password}@${server}.socks.nordhold.net:1080`
         document.getElementById("generated").value = response
+        const button = document.getElementById("copy").innerText = "📋"
       }
       function copy() {
         const value = document.getElementById("generated").value
